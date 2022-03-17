@@ -1,0 +1,45 @@
+<svg version="1.1" id="sunGlobe" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
+<radialGradient id="chubbyMoon_1_" cx="61.5" cy="38.1667" r="71.3092" gradientUnits="userSpaceOnUse">
+	<stop  offset="0.4082" style="stop-color:#D3D0B2"/>
+	<stop  offset="0.42" style="stop-color:#C5C4A0"/>
+</radialGradient>
+<ellipse id="chubbyMoon" fill="url(#chubbyMoon_1_)" stroke="#58595B" stroke-width="0.5" stroke-miterlimit="10" stroke-opacity="7.000000e-002" cx="50" cy="49.2" rx="27.3" ry="26.5"/>
+<radialGradient id="mooncrater_2_" cx="213.1896" cy="228.9649" r="71.3092" gradientTransform="matrix(0.2761 0 0 0.2761 -4.5736 -17.9305)" gradientUnits="userSpaceOnUse">
+	<stop  offset="0.385" style="stop-color:#C2B99D"/>
+	<stop  offset="0.4082" style="stop-color:#B5AA86"/>
+</radialGradient>
+<ellipse id="mooncrater" fill="url(#mooncrater_2_)" stroke="#58595B" stroke-width="0.5" stroke-miterlimit="10" stroke-opacity="7.000000e-002" cx="51.1" cy="48.3" rx="7.5" ry="7.3"/>
+<radialGradient id="mooncrater_4_" cx="193.2701" cy="181.016" r="71.3092" gradientTransform="matrix(7.215338e-002 0 0 7.215340e-002 25.6009 15.7241)" gradientUnits="userSpaceOnUse">
+	<stop  offset="0.385" style="stop-color:#C2B99D"/>
+	<stop  offset="0.4082" style="stop-color:#B5AA86"/>
+</radialGradient>
+<ellipse id="mooncrater_1_" fill="url(#mooncrater_4_)" stroke="#58595B" stroke-width="0.5" stroke-miterlimit="10" stroke-opacity="7.000000e-002" cx="38.7" cy="29.6" rx="2" ry="1.9"/>
+<radialGradient id="mooncrater_6_" cx="374.2563" cy="167.1567" r="71.3092" gradientTransform="matrix(0.1198 0 0 0.1198 13.506 8.4935)" gradientUnits="userSpaceOnUse">
+	<stop  offset="0.385" style="stop-color:#C2B99D"/>
+	<stop  offset="0.4082" style="stop-color:#B5AA86"/>
+</radialGradient>
+<ellipse id="mooncrater_3_" fill="url(#mooncrater_6_)" stroke="#58595B" stroke-width="0.5" stroke-miterlimit="10" stroke-opacity="7.000000e-002" cx="57" cy="29.8" rx="3.3" ry="3.2"/>
+<radialGradient id="mooncrater_14_" cx="463.2536" cy="274.3521" r="71.3092" gradientTransform="matrix(0.1405 0 0 0.1405 6.587 5.366)" gradientUnits="userSpaceOnUse">
+	<stop  offset="0.385" style="stop-color:#C2B99D"/>
+	<stop  offset="0.4082" style="stop-color:#B5AA86"/>
+</radialGradient>
+<ellipse id="mooncrater_5_" fill="url(#mooncrater_14_)" stroke="#58595B" stroke-width="0.5" stroke-miterlimit="10" stroke-opacity="7.000000e-002" cx="70" cy="45.4" rx="3.8" ry="3.7"/>
+<radialGradient id="mooncrater_15_" cx="179.6487" cy="280.2852" r="71.3092" gradientTransform="matrix(0.1712 0 0 0.1712 2.2486 -2.7871)" gradientUnits="userSpaceOnUse">
+	<stop  offset="0.385" style="stop-color:#C2B99D"/>
+	<stop  offset="0.4082" style="stop-color:#B5AA86"/>
+</radialGradient>
+<ellipse id="mooncrater_8_" fill="url(#mooncrater_15_)" stroke="#58595B" stroke-width="0.5" stroke-miterlimit="10" stroke-opacity="7.000000e-002" cx="31" cy="47.1" rx="4.7" ry="4.5"/>
+<radialGradient id="mooncrater_16_" cx="229.7374" cy="376.3218" r="71.3092" gradientTransform="matrix(0.1135 0 0 0.1135 12.8171 17.5574)" gradientUnits="userSpaceOnUse">
+	<stop  offset="0.385" style="stop-color:#C2B99D"/>
+	<stop  offset="0.4082" style="stop-color:#B5AA86"/>
+</radialGradient>
+<ellipse id="mooncrater_9_" fill="url(#mooncrater_16_)" stroke="#58595B" stroke-width="0.5" stroke-miterlimit="10" stroke-opacity="7.000000e-002" cx="37.6" cy="61.5" rx="3.1" ry="3"/>
+<radialGradient id="mooncrater_17_" cx="415.0933" cy="434.7574" r="71.3092" gradientTransform="matrix(0.1135 0 0 0.1135 12.8171 17.5574)" gradientUnits="userSpaceOnUse">
+	<stop  offset="0.385" style="stop-color:#C2B99D"/>
+	<stop  offset="0.4082" style="stop-color:#B5AA86"/>
+</radialGradient>
+<ellipse id="mooncrater_11_" fill="url(#mooncrater_17_)" stroke="#58595B" stroke-width="0.5" stroke-miterlimit="10" stroke-opacity="7.000000e-002" cx="58.6" cy="68.2" rx="3.1" ry="3"/>
+</svg>
+
+

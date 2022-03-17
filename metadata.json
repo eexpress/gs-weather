@@ -1,0 +1,8 @@
+{
+  "name": "Weather",
+  "description": "animation weather",
+  "uuid": "weather@eexpss.gmail.com",
+  "shell-version": [
+    "40","41","42"
+  ]
+}
