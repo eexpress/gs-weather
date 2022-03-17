@@ -16,6 +16,8 @@ const monitor = mlayout.primaryMonitor;
 const size	  = 300;
 let myX		  = 0;
 let myY		  = 0;
+let box		  = [];
+const dMax	  = 5;
 
 const xmlText = `
 <?xml version="1.0" encoding="utf-8"?>
@@ -50,29 +52,63 @@ const Indicator = GObject.registerClass(
 					myX = x - x0 + this.width / 2;
 					myY = y - y0 + this.height / 2;
 				}
-				this.easeMove(this.box, myX, myY + size / 2 + this.height / 2);
+				if (event.get_button() == 3) this.dismissBox();
+				else this.arrayBox();
 				return Clutter.EVENT_STOP;
 			});
 
-			this.icon = new St.Icon({ gicon : this.local_gicon("1"), icon_size : size, style_class : "SunGlobe" });
-			this.box  = new Clutter.Actor({ name : 'icon', reactive : true, width : size, height : size });
-			this.box.add_child(this.icon);
-			mlayout.addChrome(this.box);
-			//~ this.box.set_position(0, monitor.width - size);
-			this.box.set_position(0, 0);
-			//~ this.easeMove(this.box, 1000, 50);
-			//~ let parser = XMLParser(xml);
-			//~ log(parse);
-			//~ let xmlParsed = parseXML(xmlText);
-			//~ print(JSON.stringify(xmlParsed, null, 2));
-			this.parseWeather(xmlText);
+			box.push(this.createBox("1"));
+			box.push(this.createBox("2"));
+			box.push(this.createBox("3"));
+			box.push(this.createBox("3"));
+			box.push(this.createBox("2"));
+			box.push(this.createBox("3"));
+			//~ this.parseWeather(xmlText);
 		}
+
+		arrayBox() {
+			const i = box.length;
+			if (i < 1) return;
+			const w	 = (i - 1) * size / 2 + size / 6 + size / 2;  //第一个的中心到最后一个的右侧。
+			let offX = myX;
+			if (myX + w - size / 4 > monitor.width) {
+				offX = monitor.width - w + size / 4;
+			}
+			if (offX < size / 2) offX = size / 2;
+			for (let i in box) {
+				this.easeMove(box[i], true, offX + (i == 0 ? 0 : size / 6) + i * size / 2, myY + size / 2 + this.height / 2);
+			}
+		};
+
+		dismissBox() {
+			let offX;
+			for (let a of box) {
+				offX = Math.ceil(Math.random() * monitor.width);
+				this.easeMove(a, false, offX, monitor.height);
+			}
+		};
+
+		createBox(iconname) {
+			let _size = size;
+			if (box.length > 0) _size = size / 2;
+			const icon = new St.Icon({ gicon : this.local_gicon(iconname), icon_size : _size });
+			const _box = new Clutter.Actor({ name : iconname, reactive : true, width : _size, height : _size });
+			_box.add_child(icon);
+			_box.set_position(Math.ceil(Math.random() * monitor.width), monitor.height);
+			_box.visible = false;
+			_box.connect("button-press-event", (actor, event) => {
+				if (event.get_button() == 3) this.dismissBox();
+				else this.arrayBox();
+				return Clutter.EVENT_STOP;
+			});
+			mlayout.addChrome(_box);
+			return _box;
+		};
 
 		parseWeather(xmlText) {
 			for (let l of xmlText.split("\n")) {
 				if (!l.match(/20\d\d-\d/)) continue;
-				const a = l.replace(/<br\/>/gi, ':').replace(/<\/b>/gi, ':').replace(/<b>/gi, '\n').split('\n').filter((value, index) => value).slice(0, 3);
-				//~ for()
+				const a = l.replace(/<br\/>/gi, ':').replace(/<\/b>/gi, ':').replace(/<b>/gi, '\n').split('\n').filter((value, index) => value).slice(0, dMax);
 
 				log(a[0]);
 				log(a[1]);
@@ -91,13 +127,15 @@ const Indicator = GObject.registerClass(
 			return Gio.icon_new_for_string(Me.path + "/weather-icon/" + str + ".svg");
 		}
 
-		easeMove(a, newX, newY) {
+		easeMove(a, v, newX, newY) {
+			a.visible		   = true;
 			a.rotation_angle_z = 360;
 			newX -= a.width / 2;  //中心点移动
 			newY -= a.height / 2;
 			a.set_pivot_point(0.5, 0.5);  //旋转等的中心
 
 			a.ease({ x : newX, y : newY, rotation_angle_z : 0, duration : 1000, mode : Clutter.AnimationMode.EASE_OUT_BOUNCE, onComplete : () => {
+						if (!v) a.visible = false;
 						mlayout._queueUpdateRegions();
 					} });
 		}
