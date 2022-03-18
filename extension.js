@@ -1,6 +1,6 @@
 const GETTEXT_DOMAIN = 'weather';
 
-const { GObject, Clutter, St, Gio } = imports.gi;
+const { GObject, Clutter, St, Gio, Soup} = imports.gi;
 
 const Gettext = imports.gettext.domain(GETTEXT_DOMAIN);
 const _		  = Gettext.gettext;
@@ -17,25 +17,9 @@ const size	  = 300;
 let myX		  = 0;
 let myY		  = 0;
 let box		  = [];
-const dMax	  = 5;
-
-const xmlText = `
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN" "http://www.wapforum.org/DTD/wml_1.1.xml">
-<wml>
-<head>
-<meta http-equiv="Cache-Control" content="max-age=0"/>
-<meta http-equiv="Refresh" content="3; url=/41/changsha/tianqi/" />
-</head>
-<card title="湖南长沙天气预报">
-<p>
-湖南长沙天气预报<br/>
-<b>2022-3-17 星期四</b><br/>阵雨转多云<br/>8C～15C<br/>北风 3-4级转3-4级<br/><br/><b>2022-3-18 星期五</b><br/>多云<br/>10C～17C<br/>南风转东南风 <3级<br/><br/><b>2022-3-19 星期六</b><br/>多云转小雨<br/>12C～24C<br/>东风转北风 <3级<br/><br/><b>2022-3-20 星期日</b><br/>小雨<br/>10C～15C<br/>西北风 <3级<br/><br/><b>2022-3-21 星期一</b><br/>小雨<br/>7C～11C<br/>西北风 <3级<br/><br/><b>2022-3-22 星期二</b><br/>小雨<br/>8C～9C<br/>西北风 <3级<br/><br/><b>2022-3-23 星期三</b><br/>小雨转中雨<br/>10C～10C<br/>西北风 <3级<br/><br/><b>2022-3-24 星期四</b><br/>雨转多云<br/>7C～15C<br/>西北风转北风 <3级<br/><br/><b>2022-3-25 星期五</b><br/>阴转雨<br/>9C～14C<br/>西北风 <3级<br/><br/><b>2022-3-26 星期六</b><br/>雨<br/>9C～16C<br/>东风转北风 <3级<br/><br/><b>2022-3-27 星期日</b><br/>雨<br/>8C～12C<br/>北风转西北风 <3级<br/><br/><b>2022-3-28 星期一</b><br/>雨转阴<br/>7C～10C<br/>西北风转北风 <3级<br/><br/><b>2022-3-29 星期二</b><br/>多云转晴<br/>8C～19C<br/>北风 <3级<br/><br/><b>2022-3-30 星期三</b><br/>阴<br/>11C～22C<br/>东北风转北风 <3级<br/><br/><b>2022-3-31 星期四</b><br/>多云转阴<br/>12C～22C<br/>西北风转东风 <3级<br/><br/>
-<br/><a href="/weather/weather_prov.wml">&gt;按省份查询天气</a><br/><a href="/weather/weather_zone.wml">&gt;按邮编区号查询天气</a><br/><a href="/weather/weather_addr.wml">&gt;按地名查询天气</a><br/><a href="/weather/index.wml">&gt;天气预报首页</a><br/><a href="http://wap.ip138.com/">&gt;Wap首页</a>
-</p>
-</card>
-</wml>
-`;
+const dMax	  = 8;
+const dMin	  = 3;
+const weather = ["晴","","","","","阴","","多云转小雨,阵雨转多云","小雨","","雾霾","多云",];
 
 const Indicator = GObject.registerClass(
 	class Indicator extends PanelMenu.Button {
@@ -44,27 +28,61 @@ const Indicator = GObject.registerClass(
 
 			this.stock_icon = new St.Icon({ gicon : this.local_gicon("1") });
 			this.add_child(this.stock_icon);
-			this.connect("button-press-event", (actor, event) => {
-				if (myX == 0) {	 //点击一次后，才能算出面板图标的中心点座标。
-					const [x, y]	   = global.get_pointer();
-					const [op, x0, y0] = this.transform_stage_point(x, y);
-					if (!op) return false;
-					myX = x - x0 + this.width / 2;
-					myY = y - y0 + this.height / 2;
-				}
-				if (event.get_button() == 3) this.dismissBox();
-				else this.arrayBox();
-				return Clutter.EVENT_STOP;
-			});
+			this.connect("button-press-event", this.click.bind(this));
+			this.connect("scroll-event", this.scroll.bind(this));
 
-			box.push(this.createBox("1"));
-			box.push(this.createBox("2"));
-			box.push(this.createBox("3"));
-			box.push(this.createBox("3"));
-			box.push(this.createBox("2"));
-			box.push(this.createBox("3"));
-			//~ this.parseWeather(xmlText);
+			//~ box.push(this.createBox("2"));
+			//~ box.push(this.createBox("3"));
+			//~ box.push(this.createBox("3"));
+			//~ box.push(this.createBox("2"));
+			//~ box.push(this.createBox("3"));
+			this.get_web();
 		}
+
+		click(actor, event){
+			if (myX == 0) {	 //点击一次后，才能算出面板图标的中心点座标。
+				const [x, y]	   = global.get_pointer();
+				const [op, x0, y0] = this.transform_stage_point(x, y);
+				if (!op) return false;
+				myX = x - x0 + this.width / 2;
+				myY = y - y0 + this.height / 2;
+			}
+			switch (event.get_button()) {
+				case 1:	//show
+					this.arrayBox();
+					break;
+				case 2:	//refresh
+					this.get_web();
+					break;
+				case 3:	//dismiss
+					this.dismissBox();
+					break;
+			}
+			return Clutter.EVENT_STOP;
+
+		};
+
+		scroll(actor, event){
+			switch (event.get_scroll_direction()) {
+				case Clutter.ScrollDirection.UP:
+				case Clutter.ScrollDirection.LEFT:
+					if(box.length<dMax){
+						box.push(this.createBox("2"));
+						this.arrayBox();
+					}
+					break;
+				case Clutter.ScrollDirection.DOWN:
+				case Clutter.ScrollDirection.RIGHT:
+					if(box.length>dMin){
+						const c = box.pop();
+						c.destroy();
+						this.arrayBox();
+					}
+					break;
+				default:
+					return Clutter.EVENT_PROPAGATE;
+			}
+		};
 
 		arrayBox() {
 			const i = box.length;
@@ -81,6 +99,7 @@ const Indicator = GObject.registerClass(
 		};
 
 		dismissBox() {
+			if (box.length < 1) return;
 			let offX;
 			for (let a of box) {
 				offX = Math.ceil(Math.random() * monitor.width);
@@ -96,32 +115,62 @@ const Indicator = GObject.registerClass(
 			_box.add_child(icon);
 			_box.set_position(Math.ceil(Math.random() * monitor.width), monitor.height);
 			_box.visible = false;
-			_box.connect("button-press-event", (actor, event) => {
-				if (event.get_button() == 3) this.dismissBox();
-				else this.arrayBox();
-				return Clutter.EVENT_STOP;
-			});
+			_box.connect("button-press-event", this.click.bind(this));
 			mlayout.addChrome(_box);
 			return _box;
 		};
 
 		parseWeather(xmlText) {
+			if(!xmlText) return;
+			//~ const ByteArray = imports.byteArray;
+			for(let i of box){		i.destroy();	}
+			box = [];
 			for (let l of xmlText.split("\n")) {
 				if (!l.match(/20\d\d-\d/)) continue;
 				const a = l.replace(/<br\/>/gi, ':').replace(/<\/b>/gi, ':').replace(/<b>/gi, '\n').split('\n').filter((value, index) => value).slice(0, dMax);
-
-				log(a[0]);
-				log(a[1]);
-				log(a[2]);
-				log("--------------");
-				//~ log(r.length);
-				//~ log(typeof r);
-				//~ const s = r.join();
-				//~ log(r[1]);
-				//~ log(r[4]);
-				//~ log(s);
+				for(let s of a){
+					log(s);
+					const array = s.split(':');
+					log('==>'+array[2]);
+					const ss = array[2];
+					log(typeof ss);
+					//~ const ss = ByteArray.toString(array[2]);
+					let r = 2;
+					//~ let re = new RegExp('\b'+array[2]+'\b');
+					//~ let re = new RegExp('[^,]'+array[2]+'[,$]');
+					let re = new RegExp("[,^]+"+array[2]+"[,$]+");
+						log(re);
+					for(let i in weather){
+						//~ if(weather[i].includes(array[2])){
+						if(!weather[i]) continue;
+						//~ log(weather[i]);
+						if(re.test(weather[i])){
+						//~ if(weather[i].match(re)){
+							r = i;
+							break;
+						}
+					}
+					log("---->"+r);
+					box.push(this.createBox(r.toString()));
+				}
 			}
 		};
+
+		get_web() {
+			let web="http://qq.ip138.com/weather/hunan/ChangSha.wml";
+			//~ http://pv.sohu.com/cityjson?ie=utf-8
+			//~ var returnCitySN = {"cip": "120.227.20.213", "cid": "CN", "cname": "CHINA"};
+
+			try {
+				const session = new Soup.SessionAsync({ timeout : 10 });
+				let message = Soup.Message.new('GET', web);
+
+				session.queue_message(message, () => {
+					const response = message.response_body.data;
+					this.parseWeather(response);
+				});
+			} catch (e) { throw e; }
+		}
 
 		local_gicon(str) {
 			return Gio.icon_new_for_string(Me.path + "/weather-icon/" + str + ".svg");
