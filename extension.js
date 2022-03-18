@@ -28,7 +28,7 @@ let latitude  = '28.218743';  //纬度 latitude
 
 function lg(s) {
     //~ if (true)
-	//~ if (false)
+	if (false)
 	log("===" + GETTEXT_DOMAIN + "===>" + s);
 }
 
