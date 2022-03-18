@@ -1,98 +1,11 @@
- <svg class="svg" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+<svg class="svg" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
-	 <g id="totalSun">
-	 <g id="sunRays">
-	<radialGradient id="XMLID_4_" cx="51.1566" cy="21.1667" r="4.7267" gradientUnits="userSpaceOnUse">
-		<stop  offset="0.3333" style="stop-color:#FBD25A"/>
-		<stop  offset="0.7581" style="stop-color:#FAD45D"/>
-		<stop  offset="1" style="stop-color:#F5E16E"/>
-	</radialGradient>
-
-		<path id="XMLID_3_" fill="url(#XMLID_4_)" stroke="#6D6E71" stroke-width="0.5" stroke-miterlimit="10" stroke-opacity="7.000000e-002" d="
-		M56.1,25.3h-9.7c0,0-1.2-6.1,0-7.4c1.2-1.3,8.9-1,9.7,0C56.8,18.9,56.1,25.3,56.1,25.3z"/>
-	<radialGradient id="XMLID_12_" cx="71.2457" cy="29.7708" r="6.0292" gradientUnits="userSpaceOnUse">
-		<stop  offset="0.3333" style="stop-color:#FBD25A"/>
-		<stop  offset="0.7581" style="stop-color:#FAD45D"/>
-		<stop  offset="1" style="stop-color:#F5E16E"/>
-	</radialGradient>
-
-		<path id="XMLID_5_" fill="url(#XMLID_12_)" stroke="#6D6E71" stroke-width="0.5" stroke-miterlimit="10" stroke-opacity="7.000000e-002" d="
-		M71.8,35.8l-6.6-7.1c0,0,3.7-5,5.4-5.1s6.8,5.8,6.6,7.1C77.1,32,71.8,35.8,71.8,35.8z"/>
-	<radialGradient id="XMLID_13_" cx="79.016" cy="49.1667" r="4.757" gradientUnits="userSpaceOnUse">
-		<stop  offset="0.3333" style="stop-color:#FBD25A"/>
-		<stop  offset="0.7581" style="stop-color:#FAD45D"/>
-		<stop  offset="1" style="stop-color:#F5E16E"/>
-	</radialGradient>
-
-		<path id="XMLID_6_" fill="url(#XMLID_13_)" stroke="#6D6E71" stroke-width="0.5" stroke-miterlimit="10" stroke-opacity="7.000000e-002" d="
-		M75.1,54.2l-0.3-9.7c0,0,6.1-1.3,7.4-0.2c1.3,1.1,1.2,8.9,0.3,9.7C81.5,54.8,75.1,54.2,75.1,54.2z"/>
-	<radialGradient id="XMLID_14_" cx="70.2457" cy="69.6002" r="6.0234" gradientUnits="userSpaceOnUse">
-		<stop  offset="0.3333" style="stop-color:#FBD25A"/>
-		<stop  offset="0.7581" style="stop-color:#FAD45D"/>
-		<stop  offset="1" style="stop-color:#F5E16E"/>
-	</radialGradient>
-
-		<path id="XMLID_7_" fill="url(#XMLID_14_)" stroke="#6D6E71" stroke-width="0.5" stroke-miterlimit="10" stroke-opacity="7.000000e-002" d="
-		M64.3,70.7l6.4-7.2c0,0,5.3,3.2,5.5,4.9c0.2,1.7-5.2,7.3-6.4,7.2C68.5,75.6,64.3,70.7,64.3,70.7z"/>
-
-		<radialGradient id="XMLID_15_" cx="50.7987" cy="78.0712" r="4.7789" gradientTransform="matrix(0.998 -6.322496e-002 6.322496e-002 0.998 -4.8396 3.3703)" gradientUnits="userSpaceOnUse">
-		<stop  offset="0.3333" style="stop-color:#FBD25A"/>
-		<stop  offset="0.7581" style="stop-color:#FAD45D"/>
-		<stop  offset="1" style="stop-color:#F5E16E"/>
-	</radialGradient>
-
-		<path id="XMLID_8_" fill="url(#XMLID_15_)" stroke="#6D6E71" stroke-width="0.5" stroke-miterlimit="10" stroke-opacity="7.000000e-002" d="
-		M45.8,74.2l9.7-0.2c0,0,1.3,6.1,0.2,7.4c-1.1,1.3-8.9,1.2-9.7,0.2C45.2,80.6,45.8,74.2,45.8,74.2z"/>
-	<radialGradient id="XMLID_16_" cx="30.5864" cy="70.2252" r="6.0153" gradientUnits="userSpaceOnUse">
-		<stop  offset="0.3333" style="stop-color:#FBD25A"/>
-		<stop  offset="0.7581" style="stop-color:#FAD45D"/>
-		<stop  offset="1" style="stop-color:#F5E16E"/>
-	</radialGradient>
-
-		<path id="XMLID_9_" fill="url(#XMLID_16_)" stroke="#6D6E71" stroke-width="0.5" stroke-miterlimit="10" stroke-opacity="7.000000e-002" d="
-		M29.3,64.3l7.3,6.3c0,0-3.1,5.4-4.8,5.6s-7.4-5-7.3-6.3C24.6,68.6,29.3,64.3,29.3,64.3z"/>
-	<radialGradient id="XMLID_44_" cx="21.0871" cy="50" r="4.8093" gradientUnits="userSpaceOnUse">
-		<stop  offset="0.3333" style="stop-color:#FBD25A"/>
-		<stop  offset="0.7581" style="stop-color:#FAD45D"/>
-		<stop  offset="1" style="stop-color:#F5E16E"/>
-	</radialGradient>
-
-		<path id="XMLID_10_" fill="url(#XMLID_44_)" stroke="#6D6E71" stroke-width="0.5" stroke-miterlimit="10" stroke-opacity="7.000000e-002" d="
-		M24.8,44.8l0.6,9.6c0,0-6,1.5-7.4,0.5c-1.4-1.1-1.5-8.8-0.6-9.6C18.3,44.4,24.8,44.8,24.8,44.8z"/>
-	<radialGradient id="XMLID_45_" cx="29.9614" cy="29.0073" r="6.019" gradientUnits="userSpaceOnUse">
-		<stop  offset="0.3333" style="stop-color:#FBD25A"/>
-		<stop  offset="0.7581" style="stop-color:#FAD45D"/>
-		<stop  offset="1" style="stop-color:#F5E16E"/>
-	</radialGradient>
-
-		<path id="XMLID_11_" fill="url(#XMLID_45_)" stroke="#6D6E71" stroke-width="0.5" stroke-miterlimit="10" stroke-opacity="7.000000e-002" d="
-		M36,28.6L28.7,35c0,0-4.9-3.8-4.9-5.6c0-1.7,6.1-6.6,7.3-6.3C32.4,23.3,36,28.6,36,28.6z"/>
-		<radialGradient id="XMLID_46_" cx="50" cy="49.1667" r="26.8776" gradientUnits="userSpaceOnUse">
-			<stop  offset="0.3333" style="stop-color:#E3BF4C"/>
-			<stop  offset="0.7473" style="stop-color:#F4CE52"/>
-			<stop  offset="1" style="stop-color:#F5E16E"/>
-		</radialGradient>
-	<ellipse id="XMLID_1_" fill="url(#XMLID_46_)" stroke="#58595B" stroke-width="0.5" stroke-miterlimit="10" stroke-opacity="7.000000e-002" cx="50" cy="49.2" rx="27.3" ry="26.5"/>
-</g>
-</g>
-<g id="rain">
-	<path class="raindrop" id="drop1" fill="url(#XMLID_17_)" stroke="#000000" stroke-width="0.5" stroke-miterlimit="10" stroke-opacity="0.5" d="
-		M33.8,67.2c0,0-10.4,14.3,0,14.3C44.4,81.5,33.8,67.2,33.8,67.2z"/>
-	<linearGradient id="XMLID_17_" gradientUnits="userSpaceOnUse" x1="43.5804" y1="74.1052" x2="52.9097" y2="74.1052">
-		<stop  offset="0.4718" style="stop-color:#5CCAEB"/>
-		<stop  offset="0.5339" style="stop-color:#51B1CD"/>
-	</linearGradient>
-	<path class="raindrop" id="drop2" fill="url(#XMLID_17_)" stroke="#000000" stroke-width="0.5" stroke-miterlimit="10" stroke-opacity="0.5" d="
-		M48.2,67c0,0-10.4,14.3,0,14.3C58.8,81.3,48.2,67,48.2,67z"/>
-	<path class="raindrop" id="drop3" fill="url(#XMLID_17_)" stroke="#000000" stroke-width="0.5" stroke-miterlimit="10" stroke-opacity="0.5" d="
-		M62.4,67c0,0-10.4,14.3,0,14.3C73,81.3,62.4,67,62.4,67z"/>
-</g>
-<g id="bigCloud">
+<g id="bigCloudRain">
+	
 		<path id="XMLID_1_" fill="#F4F4F4" stroke="#515251" stroke-width="0.5" stroke-miterlimit="10" stroke-opacity="8.000000e-002" d="
 		M22.3,65.5c0,0-8.9-2.9-9.3-12.8s10-11.3,11.4-10.1c0,0,2.5-8.4,10.1-8.6c0,0,3.5-13.4,17.8-13.1c0,0,15.6-0.8,17.9,16.4
 		c0,0,12.9-1,13.4,15.1c0,0-1.4,10.9-11.9,13.1c0,0-12,2-13.8-2.3c-0.2,2.1-15,6-19.6,0C33.8,68.4,22.3,65.5,22.3,65.5z"/>
 </g>
-
 </svg>
 
 
