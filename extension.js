@@ -18,7 +18,7 @@ const size	= 300;
 let myX		= 0;
 let myY		= 0;
 const dMax	= 10;
-const dDef	= 6;
+const dDef	= 6;	//解析数据时，缺省个数。
 const dMin	= 3;
 let box		= [];
 let w_icon	= [];
@@ -121,8 +121,8 @@ const Indicator = GObject.registerClass(
 	    if (box.length < 1) return;
 	    let offX;
 	    for (let a of box) {
-		offX = Math.ceil(Math.random() * monitor.width);
-		this.easeMove(a, false, offX, monitor.height);
+			offX = Math.ceil(Math.random() * monitor.width);
+			this.easeMove(a, false, offX, monitor.height);
 	    }
 	};
 
@@ -178,9 +178,11 @@ const Indicator = GObject.registerClass(
 		session.queue_message(message, () => {
 		    const response = message.response_body.data;
 		    const obj	   = JSON.parse(response);
-		    log("===> \tlongitude: " + longitude + "; latitude: " + latitude);
-		    //~ lg(JSON.stringify(obj, null, 4));
-		    this.parseWeather(obj);
+		    if(obj.list[0].weather[0].icon){
+				log("===> \tlongitude: " + longitude + "; latitude: " + latitude);
+				//~ lg(JSON.stringify(obj, null, 4));
+				this.parseWeather(obj);
+			}
 		});
 	    } catch (e) { throw e; }
 	}
@@ -203,10 +205,14 @@ const Indicator = GObject.registerClass(
 	}
 
 	destroy() {
-	    mlayout.removeChrome(this.box);
+		for(let i of box){
+			mlayout.removeChrome(i);
+			i.destroy();
+		}
+		box	= [];	//全局变量，如果没清，重载时，会出 Object Clutter.Actor (0x557e77eb98f0), has been already deallocated
 	    super.destroy();  // Extension point conflict if no destroy.
 	}
-    });
+});
 
 class Extension {
     constructor(uuid) {
