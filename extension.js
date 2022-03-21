@@ -3,32 +3,32 @@ const GETTEXT_DOMAIN = 'weather';
 const { GObject, Clutter, St, Gio, GLib, Soup } = imports.gi;
 
 const Gettext = imports.gettext.domain(GETTEXT_DOMAIN);
-const _	      = Gettext.gettext;
+const _ = Gettext.gettext;
 
 const ExtensionUtils = imports.misc.extensionUtils;
-const Main	     = imports.ui.main;
-const PanelMenu	     = imports.ui.panelMenu;
-const PopupMenu	     = imports.ui.popupMenu;
+const Main = imports.ui.main;
+const PanelMenu = imports.ui.panelMenu;
+const PopupMenu = imports.ui.popupMenu;
 
-const Me	= ExtensionUtils.getCurrentExtension();
-const mlayout	= Main.layoutManager;
-const monitor	= mlayout.primaryMonitor;
+const Me = ExtensionUtils.getCurrentExtension();
+const mlayout = Main.layoutManager;
+const monitor = mlayout.primaryMonitor;
 const ByteArray = imports.byteArray;
-const size	= 300;
-let myX		= 0;
-let myY		= 0;
-const dMax	= 10;
-const dDef	= 6;	//解析数据时，缺省个数。
-const dMin	= 3;
-let box		= [];
-let w_icon	= [];
+const size = 300;
+let myX = 0;
+let myY = 0;
+const dMax = 10;
+const dDef = 6;	 //解析数据时，缺省个数。
+const dMin = 3;
+let box = [];
+let w_icon = [];
 
 let longitude = '112.903736';  //经度 longitude
-let latitude  = '28.218743';  //纬度 latitude
+let latitude = '28.218743';  //纬度 latitude
 
 function lg(s) {
     //~ if (true)
-	if (false)
+    if (false)
 	log("===" + GETTEXT_DOMAIN + "===>" + s);
 }
 
@@ -52,7 +52,7 @@ const Indicator = GObject.registerClass(
 
 	    this.get_web();
 
-	    this.stock_icon = new St.Icon({ gicon : this.local_gicon("1") });
+	    this.stock_icon = new St.Icon({ gicon : this.local_gicon("1"), style_class : 'system-status-icon' });
 	    this.add_child(this.stock_icon);
 	    this.connect("button-press-event", this.click.bind(this));
 	    this.connect("scroll-event", this.scroll.bind(this));
@@ -60,7 +60,7 @@ const Indicator = GObject.registerClass(
 
 	click(actor, event) {
 	    if (myX == 0) {  //点击一次后，才能算出面板图标的中心点座标。
-		const [x, y]	   = global.get_pointer();
+		const [x, y] = global.get_pointer();
 		const [op, x0, y0] = this.transform_stage_point(x, y);
 		if (!op) return false;
 		myX = x - x0 + this.width / 2;
@@ -106,7 +106,7 @@ const Indicator = GObject.registerClass(
 	arrayBox() {
 	    const i = box.length;
 	    if (i < 1) return;
-	    const w  = (i - 1) * size / 2 + size / 6 + size / 2;  //第一个的中心到最后一个的右侧。
+	    const w = (i - 1) * size / 2 + size / 6 + size / 2;	 //第一个的中心到最后一个的右侧。
 	    let offX = myX;
 	    if (myX + w - size / 4 > monitor.width) {
 		offX = monitor.width - w + size / 4;
@@ -121,8 +121,8 @@ const Indicator = GObject.registerClass(
 	    if (box.length < 1) return;
 	    let offX;
 	    for (let a of box) {
-			offX = Math.ceil(Math.random() * monitor.width);
-			this.easeMove(a, false, offX, monitor.height);
+		offX = Math.ceil(Math.random() * monitor.width);
+		this.easeMove(a, false, offX, monitor.height);
 	    }
 	};
 
@@ -173,16 +173,16 @@ const Indicator = GObject.registerClass(
 	    let url = 'https://api.openweathermap.org/data/2.5/forecast/daily';
 	    try {
 		const session = new Soup.SessionAsync({ timeout : 10 });
-		let message   = Soup.form_request_new_from_hash('GET', url, params);
+		let message = Soup.form_request_new_from_hash('GET', url, params);
 
 		session.queue_message(message, () => {
 		    const response = message.response_body.data;
-		    const obj	   = JSON.parse(response);
-		    if(obj.list[0].weather[0].icon){
-				log("===> \tlongitude: " + longitude + "; latitude: " + latitude);
-				//~ lg(JSON.stringify(obj, null, 4));
-				this.parseWeather(obj);
-			}
+		    const obj = JSON.parse(response);
+		    if (obj.list[0].weather[0].icon) {
+			log("===> \tlongitude: " + longitude + "; latitude: " + latitude);
+			//~ lg(JSON.stringify(obj, null, 4));
+			this.parseWeather(obj);
+		    }
 		});
 	    } catch (e) { throw e; }
 	}
@@ -192,7 +192,7 @@ const Indicator = GObject.registerClass(
 	}
 
 	easeMove(a, v, newX, newY) {
-	    a.visible	       = true;
+	    a.visible = true;
 	    a.rotation_angle_z = 360;
 	    newX -= a.width / 2;  //中心点移动
 	    newY -= a.height / 2;
@@ -205,14 +205,14 @@ const Indicator = GObject.registerClass(
 	}
 
 	destroy() {
-		for(let i of box){
-			mlayout.removeChrome(i);
-			i.destroy();
-		}
-		box	= [];	//全局变量，如果没清，重载时，会出 Object Clutter.Actor (0x557e77eb98f0), has been already deallocated
+	    for (let i of box) {
+		mlayout.removeChrome(i);
+		i.destroy();
+	    }
+	    box = [];  //全局变量，如果没清，重载时，会出 Object Clutter.Actor (0x557e77eb98f0), has been already deallocated
 	    super.destroy();  // Extension point conflict if no destroy.
 	}
-});
+    });
 
 class Extension {
     constructor(uuid) {
