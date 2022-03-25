@@ -18,10 +18,10 @@ const size = 300;
 let myX = 0;
 let myY = 0;
 const dMax = 10;
-const dDef = 6;	 //解析数据时，缺省个数。
+const dDef = 6;	 //解析数据时，第一次显示的缺省个数。
 const dMin = 3;
-let box = [];
-let w_icon = [];
+let box = [];		//实际显示的图标，长度可变。
+let w_icon = [];	//保留天气的图标序号，长度是 dMax。
 
 let longitude = '112.903736';  //经度 longitude
 let latitude = '28.218743';  //纬度 latitude
