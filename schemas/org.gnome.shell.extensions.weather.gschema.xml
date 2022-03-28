@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+
+  <schema id="org.gnome.shell.extensions.weather"
+    path="/org/gnome/shell/extensions/weather/">
+
+    <key name="longitude" type="s">
+      <default>"112.903736"</default>
+    </key>
+    <key name="latitude" type="s">
+      <default>"28.218743"</default>
+    </key>
+
+  </schema>
+
+</schemalist>
+
