@@ -15,10 +15,13 @@ function buildPrefsWidget() {
     return new MyPrefs();
 }
 
-//~ function fillPreferencesWindow(window){
-	//~ https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/main/js/dbusServices/extensions/extensionPrefsDialog.js#L26-35
-	//~ The fillPreferencesWindow function will have priority
-//~ }
+function fillPreferencesWindow(window){
+	let page = Adw.PreferencesPage.new();
+	page.add(new MyPrefs());
+	window.set_default_size(500, 200);
+	window.add(page);
+}
+//~ https://gjs.guide/extensions/upgrading/gnome-shell-42.html#fillpreferenceswindow
 
 class MyPrefs extends Adw.PreferencesGroup {
     static {
