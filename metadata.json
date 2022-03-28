@@ -5,7 +5,5 @@
   "gettext-domain": "weather",
   "settings-schema": "org.gnome.shell.extensions.weather",
   "url": "https://github.com/eexpress/gnome-shell-weather",
-  "shell-version": [
-    "40","41","42"
-  ]
+  "shell-version": [ "40","41","42" ]
 }
