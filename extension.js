@@ -33,8 +33,8 @@ const Indicator = GObject.registerClass(
 			super._init(0.0, _('Screen Weather'));
 
 			this.locale = GLib.get_language_names()[0];	 // zh_CN
-			if(useJsonOrSchemas){
-				try {	// 在配置界面实现全兼容前，使用文件设置经纬度。
+			if (useJsonOrSchemas) {
+				try {  // 在配置界面实现全兼容前，使用文件设置经纬度。
 					const coordfile = Me.path + '/coord.json';
 					if (GLib.file_test(coordfile, GLib.FileTest.IS_REGULAR)) {
 						const [ok, content] = GLib.file_get_contents(coordfile);
@@ -45,13 +45,10 @@ const Indicator = GObject.registerClass(
 						}
 					}
 				} catch (e) { throw e; }
-				//~ lg("json:\tlongitude: " + longitude + "; latitude: " + latitude);
-
-			}else{
+			} else {
 				const settings = ExtensionUtils.getSettings();
 				latitude = parseFloat(settings.get_string('latitude'));
 				longitude = parseFloat(settings.get_string('longitude'));
-				//~ lg("schemas:\tlongitude: " + longitude + "; latitude: " + latitude);
 			}
 
 			this.get_web();
