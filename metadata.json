@@ -1,6 +1,6 @@
 {
 	"name": "Weather",
-	"description": "Animation Weather. \nMouse 1: show weather\nMouse 2: refresh weather\nMouse 3: dismiss\nScrollUp: increase day\nScrollDown: decrease day\nYou need to fill in the correct longitude and latitude in the coord.json file.",
+	"description": "Animation Weather. \nMouse 1: show weather\nMouse 2: refresh weather\nMouse 3: dismiss\nScrollUp: increase day\nScrollDown: decrease day",
 	"uuid": "weather@eexpss.gmail.com",
 	"gettext-domain": "weather",
 	"settings-schema": "org.gnome.shell.extensions.weather",

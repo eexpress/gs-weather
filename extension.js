@@ -33,24 +33,6 @@ const Indicator = GObject.registerClass(
 			super._init(0.0, _('Screen Weather'));
 
 			this.locale = GLib.get_language_names()[0];	 // zh_CN
-			if (useJsonOrSchemas) {
-				try {  // 在配置界面实现全兼容前，使用文件设置经纬度。
-					const coordfile = Me.path + '/coord.json';
-					if (GLib.file_test(coordfile, GLib.FileTest.IS_REGULAR)) {
-						const [ok, content] = GLib.file_get_contents(coordfile);
-						if (ok) {
-							const obj = JSON.parse(ByteArray.toString(content));
-							if (obj.latitude) latitude = obj.latitude;
-							if (obj.longitude) longitude = obj.longitude;
-						}
-					}
-				} catch (e) { throw e; }
-			} else {
-				const settings = ExtensionUtils.getSettings();
-				latitude = parseFloat(settings.get_string('latitude'));
-				longitude = parseFloat(settings.get_string('longitude'));
-			}
-
 			this.get_web();
 
 			this.stock_icon = new St.Icon({ gicon : this.local_gicon("1"), style_class : 'system-status-icon' });
@@ -161,7 +143,28 @@ const Indicator = GObject.registerClass(
 			}
 		};
 
+		get_coord(){
+			if (useJsonOrSchemas) {
+				try {  // 在配置界面实现全兼容前，使用文件设置经纬度。
+					const coordfile = Me.path + '/coord.json';
+					if (GLib.file_test(coordfile, GLib.FileTest.IS_REGULAR)) {
+						const [ok, content] = GLib.file_get_contents(coordfile);
+						if (ok) {
+							const obj = JSON.parse(ByteArray.toString(content));
+							if (obj.latitude) latitude = obj.latitude;
+							if (obj.longitude) longitude = obj.longitude;
+						}
+					}
+				} catch (e) { throw e; }
+			} else {
+				const settings = ExtensionUtils.getSettings();
+				latitude = parseFloat(settings.get_string('latitude'));
+				longitude = parseFloat(settings.get_string('longitude'));
+			}
+		};
+
 		get_web() {
+			this.get_coord();
 			let params = {
 				APPID : 'c93b4a667c8c9d1d1eb941621f899bb8',
 				exclude : 'minutely,hourly,alerts,flags',

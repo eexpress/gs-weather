@@ -26,16 +26,7 @@ class MyPrefs extends Adw.PreferencesGroup {
 	}
 	constructor() {
 		super();
-		log(this);
 
-		//~ this.add(new Gtk.Label({
-			//~ label: _('geo coordinates').bold(),
-			//~ halign: Gtk.Align.START,
-			//~ use_markup: true
-		//~ }));
-
-		//~ this._longitude = new Gtk.Entry({ valign : Gtk.Align.CENTER });
-		//~ this._latitude = new Gtk.Entry({ valign : Gtk.Align.CENTER });
 		this._longitude = new Gtk.Entry();
 		this._latitude = new Gtk.Entry();
 		[
@@ -43,22 +34,10 @@ class MyPrefs extends Adw.PreferencesGroup {
 			[ this._latitude, _('latitude'), _('latitude of your city'), 'latitude' ]
 		].forEach(e => this.add(new MyRow(...e)));
 
-		//~ this.add(new Gtk.Label({
-			//~ label: _('search your city').bold(),
-			//~ halign: Gtk.Align.START,
-			//~ use_markup: true
-		//~ }));
-
 		this._input = new Gtk.Entry();
 		this.add(new MyRow(this._input, _('City'), _('search your city'), ''));
-		//~ this._input.connectObject('active', this._activate.bind(this), this);
 		this._input.connect('activate', this.get_web.bind(this));
 	}
-
-	//~ _activate(){
-		//~ log(this._input.text);
-		//~ this.get_web();
-	//~ };
 
 	get_web() {
 		let params = {
