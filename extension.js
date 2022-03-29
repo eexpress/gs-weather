@@ -175,7 +175,7 @@ const Indicator = GObject.registerClass(
 			try {
 				const session = new Soup.SessionAsync({ timeout : 10 });
 				let message = Soup.form_request_new_from_hash('GET', url, params);
-
+//~ https://api.openweathermap.org/data/2.5/forecast/daily?APPID=c93b4a667c8c9d1d1eb941621f899bb8&lat=28.1450774&lon=113.2384362&units=metric&cnt=13&lang=zh_cn
 				session.queue_message(message, () => {
 					const response = message.response_body.data;
 					const obj = JSON.parse(response);
