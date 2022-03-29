@@ -33,6 +33,11 @@ const Indicator = GObject.registerClass(
 			super._init(0.0, _('Screen Weather'));
 
 			this.locale = GLib.get_language_names()[0];	 // zh_CN
+			this.settings = ExtensionUtils.getSettings();
+			this.settings.connect('changed::latitude', () => {
+				this.get_web();
+			});
+
 			this.get_web();
 
 			this.stock_icon = new St.Icon({ gicon : this.local_gicon("1"), style_class : 'system-status-icon' });
@@ -157,9 +162,8 @@ const Indicator = GObject.registerClass(
 					}
 				} catch (e) { throw e; }
 			} else {
-				const settings = ExtensionUtils.getSettings();
-				latitude = parseFloat(settings.get_string('latitude'));
-				longitude = parseFloat(settings.get_string('longitude'));
+				latitude = parseFloat(this.settings.get_string('latitude'));
+				longitude = parseFloat(this.settings.get_string('longitude'));
 			}
 		};
 
