@@ -162,18 +162,19 @@ const Indicator = GObject.registerClass(
 					}
 				} catch (e) { throw e; }
 			} else {
-				latitude = parseFloat(this.settings.get_string('latitude'));
-				longitude = parseFloat(this.settings.get_string('longitude'));
+				latitude = this.settings.get_string('latitude');
+				longitude = this.settings.get_string('longitude');
 			}
 		};
 
 		get_web() {
 			this.get_coord();
+			if (! latitude || ! longitude) return;	//null, 0, ''
 			let params = {
 				APPID : 'c93b4a667c8c9d1d1eb941621f899bb8',
 				exclude : 'minutely,hourly,alerts,flags',
-				lat : latitude.toString(),	//纬度 latitude
-				lon : longitude.toString(),	 //经度 longitude
+				lat : latitude,		//纬度 latitude
+				lon : longitude,	//经度 longitude
 				lang : this.locale,
 				units : 'metric',
 				cnt : dMax.toString()
