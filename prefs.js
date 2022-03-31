@@ -31,8 +31,6 @@ class MyPrefs extends Adw.PreferencesGroup {
 
 		this._longitude = new Gtk.Entry();
 		this._latitude = new Gtk.Entry();
-		//~ this._longitude.connect('icon-press', this.icon_press.bind(this));
-		//~ this._latitude.connect('icon-press', this.icon_press.bind(this));
 		[
 			[ this._longitude, true, _('longitude'), _('longitude of your city'), 'longitude' ],
 			[ this._latitude, true, _('latitude'), _('latitude of your city'), 'latitude' ]]
@@ -43,19 +41,11 @@ class MyPrefs extends Adw.PreferencesGroup {
 		});
 		this.add(new MyRow(this._input, true, _('City'), _('search your city'), ''));
 		this._input.connect('activate', this.get_web.bind(this));
-		//~ this._input.connect('icon-press', this.icon_press.bind(this));
 	}
-
-	//~ icon_press(obj, pos, event){
-		//~ if (pos == Gtk.EntryIconPosition.PRIMARY) obj.text = '';
-		//~ else {
-			//~ if (obj.secondary_icon_activatable) this.get_web();
-		//~ }
-	//~ };
 
 	get_web() {	//调用 PreferencesGroup 控件多，不能移到类的外部。
 		const city = this._input.text;
-		if (city == '' || city.length < 3) return;
+		if (city == '' || city.length < 2) return;
 		let params = {
 			appid : 'c93b4a667c8c9d1d1eb941621f899bb8',
 			limit : '3',
