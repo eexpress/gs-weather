@@ -8,6 +8,7 @@ const Me = ExtensionUtils.getCurrentExtension();
 const _ = ExtensionUtils.gettext;
 
 let list = [];
+let funcPG;
 
 function init() {
 	ExtensionUtils.initTranslations();
@@ -15,7 +16,8 @@ function init() {
 
 function fillPreferencesWindow(window) {
 	let page = Adw.PreferencesPage.new();
-	page.add(new MyPrefs());
+	funcPG = new MyPrefs();
+	page.add(funcPG);
 	window.set_default_size(500, 400);
 	window.add(page);
 }
@@ -29,8 +31,8 @@ class MyPrefs extends Adw.PreferencesGroup {
 
 		this._longitude = new Gtk.Entry();
 		this._latitude = new Gtk.Entry();
-		this._longitude.connect('icon-press', this.icon_press.bind(this));
-		this._latitude.connect('icon-press', this.icon_press.bind(this));
+		//~ this._longitude.connect('icon-press', this.icon_press.bind(this));
+		//~ this._latitude.connect('icon-press', this.icon_press.bind(this));
 		[
 			[ this._longitude, true, _('longitude'), _('longitude of your city'), 'longitude' ],
 			[ this._latitude, true, _('latitude'), _('latitude of your city'), 'latitude' ]]
@@ -41,15 +43,15 @@ class MyPrefs extends Adw.PreferencesGroup {
 		});
 		this.add(new MyRow(this._input, true, _('City'), _('search your city'), ''));
 		this._input.connect('activate', this.get_web.bind(this));
-		this._input.connect('icon-press', this.icon_press.bind(this));
+		//~ this._input.connect('icon-press', this.icon_press.bind(this));
 	}
 
-	icon_press(obj, pos, event){
-		if (pos == Gtk.EntryIconPosition.PRIMARY) obj.text = '';
-		else {
-			if (obj.secondary_icon_activatable) this.get_web();
-		}
-	};
+	//~ icon_press(obj, pos, event){
+		//~ if (pos == Gtk.EntryIconPosition.PRIMARY) obj.text = '';
+		//~ else {
+			//~ if (obj.secondary_icon_activatable) this.get_web();
+		//~ }
+	//~ };
 
 	get_web() {
 		const city = this._input.text;
@@ -111,12 +113,12 @@ class MyRow extends Adw.ActionRow {
 		suffix_widget.valign = Gtk.Align.CENTER;
 		if (isEntry) {
 			suffix_widget.primary_icon_name = 'edit-clear-all-symbolic';
-			//~ suffix_widget.connect('icon-press', (obj, pos, event) => {
-				//~ if (pos == Gtk.EntryIconPosition.PRIMARY) obj.text = '';
-				//~ else {
-					//~ if (obj.secondary_icon_activatable) obj.super.get_web();
-				//~ }
-			//~ });
+			suffix_widget.connect('icon-press', (obj, pos, event) => {
+				if (pos == Gtk.EntryIconPosition.PRIMARY) obj.text = '';
+				else {
+					if (obj.secondary_icon_activatable) funcPG.get_web();
+				}
+			});
 		}
 		this.add_suffix(suffix_widget);
 		this.set_activatable_widget(suffix_widget);
