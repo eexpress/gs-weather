@@ -8,6 +8,10 @@
 - ScrollUp: increase day
 - ScrollDown: decrease day
 
-> You need to fill in the correct longitude and latitude in the coord.json file.
+> Below Gnome 42, You need to fill in the correct longitude and latitude in the coord.json file.
 
 ![](screenshot.png)
+
+> On Gnome 42, extension provide the config interface.
+
+![](screenshot1.png)
