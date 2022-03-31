@@ -53,7 +53,7 @@ class MyPrefs extends Adw.PreferencesGroup {
 		//~ }
 	//~ };
 
-	get_web() {
+	get_web() {	//调用 PreferencesGroup 控件多，不能移到类的外部。
 		const city = this._input.text;
 		if (city == '' || city.length < 3) return;
 		let params = {
