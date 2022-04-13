@@ -4,7 +4,7 @@
 	"uuid": "weather@eexpss.gmail.com",
 	"gettext-domain": "weather",
 	"settings-schema": "org.gnome.shell.extensions.weather",
-	"url": "https://github.com/eexpress/gnome-shell-weather",
+	"url": "https://github.com/eexpress/gs-weather",
 	"shell-version": [
 		"42"
 	]
