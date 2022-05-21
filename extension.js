@@ -1,4 +1,4 @@
-const { GObject, Clutter, St, Gio, GLib, Soup } = imports.gi;
+const { GObject, Clutter, St, Gio, GLib, Soup, PangoCairo, Pango } = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Main = imports.ui.main;
@@ -7,6 +7,7 @@ const PopupMenu = imports.ui.popupMenu;
 const Me = ExtensionUtils.getCurrentExtension();
 const _domain = Me.metadata['gettext-domain'];
 const _ = ExtensionUtils.gettext;
+const Cairo = imports.cairo;
 
 const mlayout = Main.layoutManager;
 const monitor = mlayout.primaryMonitor;
@@ -18,7 +19,11 @@ const dMax = 10;
 const dDef = 6;	 //解析数据时，第一次显示的缺省个数。
 const dMin = 3;
 let box = [];  //实际显示的图标，长度可变。
-let w_icon = [];  //保留天气的图标序号，长度是 dMax。
+let w_icon = [];  //保留天气的图标序号，Int，长度是 dMax。
+let w_desc = [];  //保留天气的描述，Text，长度是 dMax。
+let w_temp = [];  //保留天气的温度，Text，长度是 dMax。
+let xMsg;
+let boxindex = 0;	//当前hover的位置索引。
 
 let longitude = '112.903736';  //经度 longitude
 let latitude = '28.218743';	 //纬度 latitude
@@ -44,6 +49,58 @@ const Indicator = GObject.registerClass(
 			this.add_child(this.stock_icon);
 			this.connect("button-press-event", this.click.bind(this));
 			this.connect("scroll-event", this.scroll.bind(this));
+
+			xMsg = new Clutter.Actor({
+				name : 'xMsg',
+				reactive : false,
+				width : 120,
+				height : 60,
+			});
+			this._canvas = new Clutter.Canvas();
+			this._canvas.connect('draw', this.on_draw.bind(this));
+			this._canvas.set_size(xMsg.width, xMsg.height);
+			xMsg.set_content(this._canvas);
+			xMsg.visible = false;
+
+		}
+
+		on_draw(canvas, ctx, width, height) {
+			ctx.setOperator(Cairo.Operator.CLEAR);
+			ctx.paint();
+			ctx.setOperator(Cairo.Operator.SOURCE);
+			ctx.setSourceRGBA(0, 0, 0, 1);
+			ctx.rectangle(0,0,xMsg.width,xMsg.height);
+			ctx.fill();
+			ctx.setSourceRGBA(1, 1, 1, 1);
+			ctx.moveTo(xMsg.width/2, 10);
+			this.align_show(ctx, w_desc[boxindex]);
+			ctx.moveTo(xMsg.width/2, 30);
+			this.align_show(ctx, w_temp[boxindex]);
+		}
+
+		align_show(ctx, showtext, font = "Sans Bold 10") {
+			let pl = PangoCairo.create_layout(ctx);
+			pl.set_text(showtext, -1);
+			pl.set_font_description(Pango.FontDescription.from_string(font));
+			PangoCairo.update_layout(ctx, pl);
+			let [w, h] = pl.get_pixel_size();
+			ctx.relMoveTo(-w / 2, 0);
+			PangoCairo.show_layout(ctx, pl);
+			ctx.relMoveTo(w / 2, 0);
+		}
+
+		enter(actor, event) {
+			const i = box.indexOf(actor);
+			if(i >= 0) {
+				boxindex = i;
+				this._canvas.invalidate();
+			}
+			xMsg.set_position(actor.x+actor.width/2-xMsg.width/2, actor.y+actor.height);
+			xMsg.visible = true;
+		}
+
+		leave(actor, event) {
+			xMsg.visible = false;
 		}
 
 		click(actor, event) {
@@ -124,6 +181,8 @@ const Indicator = GObject.registerClass(
 			_box.visible = false;
 			_box.connect("button-press-event", this.click.bind(this));
 			_box.connect("scroll-event", this.scroll.bind(this));
+			_box.connect("enter-event", this.enter.bind(this));
+			_box.connect("leave-event", this.leave.bind(this));
 			mlayout.addChrome(_box);
 			return _box;
 		};
@@ -138,10 +197,12 @@ const Indicator = GObject.registerClass(
 			for (let i = 0; i < dMax; i++) {
 				const jsonicon = json.list[i].weather[0].icon;
 				const jsondesc = json.list[i].weather[0].description;
-				//~ lg(jsondesc + ",\t" + jsonicon);
+				const jsontemp = json.list[i].temp.min + "℃ - " + json.list[i].temp.max + "℃";
 				if (jsonicon) {
 					const d = parseInt(jsonicon);
 					w_icon.push(d);
+					w_desc.push(jsondesc);
+					w_temp.push(jsontemp);
 					if (box.length < dDef) box.push(this.createBox(d.toString()));
 					if (i == 0) this.stock_icon.set_gicon(this.local_gicon(d.toString()));
 				} else break;
@@ -183,7 +244,7 @@ const Indicator = GObject.registerClass(
 			try {
 				const session = new Soup.SessionAsync({ timeout : 10 });
 				let message = Soup.form_request_new_from_hash('GET', url, params);
-//~ https://api.openweathermap.org/data/2.5/forecast/daily?APPID=c93b4a667c8c9d1d1eb941621f899bb8&lat=28.1450774&lon=113.2384362&units=metric&cnt=13&lang=zh_cn
+//~ https://api.openweathermap.org/data/2.5/forecast/daily?APPID=c93b4a667c8c9d1d1eb941621f899bb8&lat=28.2302056&lon=112.9335861&units=metric&cnt=13&lang=zh_cn
 				session.queue_message(message, () => {
 					const response = message.response_body.data;
 					const obj = JSON.parse(response);
@@ -233,11 +294,14 @@ class Extension {
 	enable() {
 		this._indicator = new Indicator();
 		Main.panel.addToStatusArea(this._uuid, this._indicator);
+		mlayout.addChrome(xMsg);
 	}
 
 	disable() {
 		this._indicator.destroy();
 		this._indicator = null;
+		mlayout.removeChrome(xMsg);
+		xMsg = null;
 	}
 }
 
