@@ -37,7 +37,7 @@ const Indicator = GObject.registerClass(
 		_init() {
 			super._init(0.0, _('Screen Weather'));
 
-			this.locale = GLib.get_language_names()[0];	 // zh_CN
+			this.locale = GLib.get_language_names()[0].split('.')[0];	 // zh_CN
 			this.settings = ExtensionUtils.getSettings();
 			this.settings.connect('changed::latitude', () => {
 				this.get_web();
