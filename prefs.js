@@ -1,5 +1,39 @@
 'use strict';
 
+//~ SyntaxError: import declarations may only appear at top level of a module
+//~ import gi from 'gi';
+//~ let Soup;
+//~ try {
+    //~ Soup = gi.require('Soup', '3.0');
+//~ } catch (e) {
+//~ ReferenceError: gi is not defined
+    //~ Soup = gi.require('Soup', '2.4');
+    //~ Soup.Message.new_from_encoded_form =
+        //~ function (method, uri, form) {
+            //~ const message = Soup.Message.new_from_uri(method, new Soup.URI(uri));
+            //~ message.set_request(
+                //~ Soup.FORM_MIME_TYPE_URLENCODED,
+                //~ Soup.MemoryUse.COPY,
+                //~ form);
+            //~ return message;
+        //~ };
+
+    //~ Soup.Session.prototype.send_and_read_async =
+        //~ function (message, prio, cancellable, callback) {
+            //~ this.queue_message(message, () => callback(this, message));
+        //~ };
+    //~ Soup.Session.prototype.send_and_read_finish =
+        //~ function (message) {
+            //~ if (message.status_code !== Soup.KnownStatusCode.OK)
+                //~ return null;
+
+            //~ return message.response_body.flatten().get_as_bytes();
+        //~ };
+//~ }
+//~ Gio._promisify(Soup.Session.prototype, 'send_and_read_async', 'send_and_read_finish');
+//~ --------------------------------------------------------------------------------------------
+imports.gi.versions.Soup = "3.0";
+
 const { Adw, Gio, Gtk, GObject, Soup, GLib } = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;
@@ -43,7 +77,7 @@ class MyPrefs extends Adw.PreferencesGroup {
 		this._input.connect('activate', this.get_web.bind(this));
 	}
 
-	get_web() {	//调用 PreferencesGroup 控件多，不能移到类的外部。
+	async get_web() {	//调用 PreferencesGroup 控件多，不能移到类的外部。
 		const city = this._input.text;
 		if (city == '' || city.length < 2) return;
 		let params = {
@@ -52,12 +86,20 @@ class MyPrefs extends Adw.PreferencesGroup {
 			q : city
 		};
 		let url = 'https://api.openweathermap.org/geo/1.0/direct';
+//~ https://github.com/GNOME/polari/blob/c51ad7aecdd9e5331187dcc33135129845a21bb8/src/utils.js#L431-L434
+//~ https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/main/js/ui/environment.js#L109
 		try {
-			const session = new Soup.SessionAsync({ timeout : 10 });
-			let message = Soup.form_request_new_from_hash('GET', url, params);
+			//~ const session = new Soup.SessionAsync({ timeout : 10 });
+			const session = new Soup.Session({ timeout : 10 });
+			//~ let message = Soup.form_request_new_from_hash('GET', url, params);
+			const message = Soup.Message.new_from_encoded_form('GET', url, Soup.form_encode_hash(params));
 
-			session.queue_message(message, () => {
-				const response = message.response_body.data;
+			//~ session.queue_message(message, () => {
+			await session.send_and_read_async(message, GLib.PRIORITY_DEFAULT, null, (_, r0) => {
+				//~ const response = message.response_body.data;
+				let m = session.send_and_read_finish(r0);
+				var response = new TextDecoder().decode(m.get_data());
+				//~ log(response);
 				const obj = JSON.parse(response);
 				list.forEach(k => {if(k){ this.remove(k);} });
 				list = [];

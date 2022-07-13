@@ -1,3 +1,5 @@
+imports.gi.versions.Soup = "3.0";
+
 const { GObject, Clutter, St, Gio, GLib, Soup, PangoCairo, Pango } = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;
@@ -73,9 +75,9 @@ const Indicator = GObject.registerClass(
 			ctx.fill();
 			ctx.setSourceRGBA(1, 1, 1, 1);
 			ctx.moveTo(xMsg.width/2, 10);
-			this.align_show(ctx, w_desc[boxindex]);
+			this.align_show(ctx, w_desc[boxindex] || "");
 			ctx.moveTo(xMsg.width/2, 30);
-			this.align_show(ctx, w_temp[boxindex]);
+			this.align_show(ctx, w_temp[boxindex] || "");
 		}
 
 		align_show(ctx, showtext, font = "Sans Bold 10") {
@@ -228,7 +230,7 @@ const Indicator = GObject.registerClass(
 			}
 		};
 
-		get_web() {
+		async get_web() {
 			this.get_coord();
 			if (! latitude || ! longitude) return;	//null, 0, ''
 			let params = {
@@ -242,11 +244,18 @@ const Indicator = GObject.registerClass(
 			};
 			let url = 'https://api.openweathermap.org/data/2.5/forecast/daily';
 			try {
-				const session = new Soup.SessionAsync({ timeout : 10 });
-				let message = Soup.form_request_new_from_hash('GET', url, params);
+				//~ const session = new Soup.SessionAsync({ timeout : 10 });
+				const session = new Soup.Session({ timeout : 10 });
+				//~ let message = Soup.form_request_new_from_hash('GET', url, params);
+				const message = Soup.Message.new_from_encoded_form('GET', url, Soup.form_encode_hash(params));
+
 //~ https://api.openweathermap.org/data/2.5/forecast/daily?APPID=c93b4a667c8c9d1d1eb941621f899bb8&lat=28.2302056&lon=112.9335861&units=metric&cnt=13&lang=zh_cn
-				session.queue_message(message, () => {
-					const response = message.response_body.data;
+				//~ session.queue_message(message, () => {
+				await session.send_and_read_async(message, GLib.PRIORITY_DEFAULT, null, (_, r0) => {
+					//~ const response = message.response_body.data;
+					let m = session.send_and_read_finish(r0);
+					var response = new TextDecoder().decode(m.get_data());
+					//~ log(response);
 					const obj = JSON.parse(response);
 					if (obj.list[0].weather[0].icon) {
 						lg("get:\tlongitude: " + longitude + "; latitude: " + latitude);
