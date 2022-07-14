@@ -22,6 +22,7 @@ const dDef = 6;	 //解析数据时，第一次显示的缺省个数。
 const dMin = 3;
 let box = [];  //实际显示的图标，长度可变。
 let w_icon = [];  //保留天气的图标序号，Int，长度是 dMax。
+let w_date = [];  //保留天气的日期，Text，长度是 dMax。
 let w_desc = [];  //保留天气的描述，Text，长度是 dMax。
 let w_temp = [];  //保留天气的温度，Text，长度是 dMax。
 let xMsg;
@@ -55,8 +56,8 @@ const Indicator = GObject.registerClass(
 			xMsg = new Clutter.Actor({
 				name : 'xMsg',
 				reactive : false,
-				width : 120,
-				height : 60,
+				width : 130,
+				height : 80,
 			});
 			this._canvas = new Clutter.Canvas();
 			this._canvas.connect('draw', this.on_draw.bind(this));
@@ -75,8 +76,10 @@ const Indicator = GObject.registerClass(
 			ctx.fill();
 			ctx.setSourceRGBA(1, 1, 1, 1);
 			ctx.moveTo(xMsg.width/2, 10);
-			this.align_show(ctx, w_desc[boxindex] || "");
+			this.align_show(ctx, w_date[boxindex] || "");
 			ctx.moveTo(xMsg.width/2, 30);
+			this.align_show(ctx, w_desc[boxindex] || "");
+			ctx.moveTo(xMsg.width/2, 50);
 			this.align_show(ctx, w_temp[boxindex] || "");
 		}
 
@@ -200,9 +203,13 @@ const Indicator = GObject.registerClass(
 				const jsonicon = json.list[i].weather[0].icon;
 				const jsondesc = json.list[i].weather[0].description;
 				const jsontemp = json.list[i].temp.min + "℃ - " + json.list[i].temp.max + "℃";
+				//~ 本地语言标识 "zh_CN"，但是 toLocaleDateString 函数只认 "zh-CN"。
+				const locales = this.locale.replace(/_/g, '-');
+				const jsondate = new Date(json.list[i].dt*1000).toLocaleDateString(locales, { weekday:"long", month:"short", day:"numeric"});
 				if (jsonicon) {
 					const d = parseInt(jsonicon);
 					w_icon.push(d);
+					w_date.push(jsondate);
 					w_desc.push(jsondesc);
 					w_temp.push(jsontemp);
 					if (box.length < dDef) box.push(this.createBox(d.toString()));
