@@ -1,6 +1,6 @@
 {
 	"name": "Weather",
-	"description": "Animation Weather. \nMouse 1: show weather\nMouse 2: refresh weather\nMouse 3: dismiss\nScrollUp: increase day\nScrollDown: decrease day",
+	"description": "Animation Weather. \nMouse 1: show weather\nMouse 2: refresh weather\nMouse 3: dismiss\nScrollUp: increase day\nScrollDown: decrease day\nAdded i18n date, weather, temperature.",
 	"uuid": "weather@eexpss.gmail.com",
 	"gettext-domain": "weather",
 	"settings-schema": "org.gnome.shell.extensions.weather",

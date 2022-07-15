@@ -1,5 +1,3 @@
-imports.gi.versions.Soup = "3.0";
-
 const { GObject, Clutter, St, Gio, GLib, Soup, PangoCairo, Pango } = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;
@@ -178,7 +176,7 @@ const Indicator = GObject.registerClass(
 
 		createBox(iconname) {
 			let _size = size;
-			if (box.length > 0) _size = size / 2;
+			if (box.length > 0) _size = size / 2;	//除开第一个，其他的使用一半的尺寸。
 			const icon = new St.Icon({ gicon : this.local_gicon(iconname), icon_size : _size });
 			const _box = new Clutter.Actor({ name : iconname, reactive : true, width : _size, height : _size });
 			_box.add_child(icon);
