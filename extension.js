@@ -29,7 +29,7 @@ let boxindex = 0;	//当前hover的位置索引。
 let longitude = '112.903736';  //经度 longitude
 let latitude = '28.218743';	 //纬度 latitude
 
-function lg(s) { log("===" + _domain + "===>" + s); }
+function lg(s) { log('===\x1b[91;1;5;1m' + _domain + '\x1b[0m===>' + s); }
 
 const useJsonOrSchemas = false;
 
@@ -263,7 +263,7 @@ const Indicator = GObject.registerClass(
 					//~ log(response);
 					const obj = JSON.parse(response);
 					if (obj.list[0].weather[0].icon) {
-						lg("get:\tlongitude: " + longitude + "; latitude: " + latitude);
+						//~ lg("get:\tlongitude: " + longitude + "; latitude: " + latitude);
 						//~ lg(JSON.stringify(obj, null, 4));
 						this.parseWeather(obj);
 					}
